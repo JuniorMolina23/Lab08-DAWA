@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Usuarios</title>
+    <!-- Agregamos la referencia a Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <script src="../public/js/script.js"></script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center">
+                    <h1>Usuarios</h1>
+                    <form action="/users" method="POST">
+                        <label for="name" class="form-label">Nombre:</label>
+                        <input type="text" id="name" name="name" value="<%= datos.name %>"
+                            class="form-control text-center">
+                        <% errors.forEach((error)=> { %>
+                            <% if (error.path=='name' ) { %>
+                                <p class="text-danger" id="text-error">*<%= error.msg %>
+                                </p>
+                            <% } %>
+                        <% }) %>
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="text" id="email" name="email" value="<%= datos.email %>"
+                            class="form-control text-center">
+                        <% errors.forEach((error)=> { %>
+                            <% if (error.path=='email' ) { %>
+                                <p class="text-danger" id="email-error">*<%= error.msg %>
+                                </p>
+                            <% } %>
+                        <% }) %>
+                        <label for="password" class="form-label">Contraseña:</label>
+                        <input type="password" id="password" name="password" class="form-control text-center">
+                        <% errors.forEach((error)=> { %>
+                            <% if (error.path=='password' ) { %>
+                                <p class="text-danger pass-error">*<%= error.msg %>
+                                </p>
+                            <% } %>
+                        <% }) %>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    </form>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <h2>Lista de Usuarios</h2>
+        <table id="example" class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach((user)=> { %>
+                    <tr class="tr">
+                        <td>
+                            <%= user.name %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td><a href="/users/edit/<%= user._id %>" class="btn btn-sm btn-primary mx-1">Editar</a></td>
+                        <td><button class="btn btn-sm btn-danger mx-1" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop<%= user._id %>">Eliminar</button></td>
+                    </tr>
+                    <div class="modal fade" id="staticBackdrop<%= user._id %>" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel"><b>Eliminar</b></h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label class="col-form-label">Desea eliminar a <%= user.name %></label>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-warning"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <a href="/users/delete/<%= user._id %>" type="submit"
+                                        class="btn btn-danger">Eliminar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </tbody>
+        </table>
+        <div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('name').addEventListener('input', function () {
+            document.getElementById('text-error').style.display = 'none';
+        });
+        document.getElementById('email').addEventListener('input', function () {
+            document.getElementById('email-error').style.display = 'none';
+        });
+        document.getElementById('password').addEventListener('input', function () {
+            const passErrors = document.getElementsByClassName('pass-error');
+            for (let i = 0; i < passErrors.length; i++) {
+                passErrors[i].style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Usuario</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container mt-5 text-center">
+    <div class="row justify-content-center">
+      <h1>Editar Usuario</h1>
+      <div class="col-md-5">
+        <div class="text-center">
+          <form action="/users/update/<%= user._id %>" method="POST">
+            <label for="name" class="form-label">Nombre:</label>
+            <input type="text" id="name" class="form-control text-center" name="name" value="<%= user.name %>">
+            <% errors.forEach((error) => { %>
+              <% if (error.path == 'name') { %>
+                  <p class="text-danger" id="name-error">*<%= error.msg %></p>
+                <% } %>
+            <% }) %>
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" class="form-control text-center" name="email" value="<%= user.email %>">
+            <% errors.forEach((error)=> { %>
+              <% if (error.path=='email' ) { %>
+                  <p class="text-danger" id="email-error">*<%= error.msg %>
+                  </p>
+              <% } %>
+            <% }) %>
+            <label for="password" class="form-label">Contraseña:</label>
+            <input name="change" type="checkbox" id="password-toggle">
+            <input type="password" id="password" class="form-control text-center" name="password" disabled
+            placeholder="Activa el checbox para cambiar la contraseña">
+            <% errors.forEach((error)=> { %>
+              <% if (error.path=='password' ) { %>
+                  <p class="text-danger pass-error">*<%= error.msg %>
+                  </p>
+              <% } %>
+          <% }) %>
+            <br>
+            <button type="submit" class="btn btn-success">Actualizar Usuario</button>
+          </form>
+          <hr>
+          <a class="btn btn-danger" href="/users">Regresar a la lista de usuarios</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const passwordInput = document.getElementById("password");
+    const passwordToggle = document.getElementById("password-toggle");
+  
+    passwordToggle.addEventListener("change", function() {
+      passwordInput.disabled = !passwordInput.disabled;
+      if (passwordInput.disabled) {
+        passwordInput.value = "";
+        passwordInput.placeholder="Activa el checbox para cambiar la contraseña";
+        limpiar()
+      }
+      else{
+        passwordInput.placeholder="Desactiva el CheckBox si no deseas cambiar la contraseña"
+        limpiar()
+      }
+    });
+    document.getElementById('name').addEventListener('input', function () {
+      document.getElementById('text-error').style.display = 'none';
+    });
+    document.getElementById('email').addEventListener('input', function () {
+        document.getElementById('email-error').style.display = 'none';
+    });
+    document.getElementById('password').addEventListener('input', function () {
+      limpiar();
+    });
+    
+    function limpiar() {
+      const passErrors = document.getElementsByClassName('pass-error');
+      for (let i = 0; i < passErrors.length; i++) {
+        passErrors[i].style.display = 'none';
+      }
+    }
+
+  </script>
+</body>
+
+</html>
